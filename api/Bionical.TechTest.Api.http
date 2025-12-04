@@ -1,0 +1,27 @@
+@hostAddress = https://localhost:7197
+@userId = 7e3a89b5-446b-43c8-8776-006e8ab5d6ee
+
+GET {{hostAddress}}/users
+Accept: application/json
+
+###
+
+GET {{hostAddress}}/users/{{userId}}
+Accept: application/json
+
+###
+
+PUT {{hostAddress}}/users/{{userId}}
+Accept: application/json
+Content-Type: application/json
+
+{
+  "firstName": "Jane",
+  "lastName": "Doe",
+  "email": "jane.doe@gmail.com",
+  "gender": 1,
+  "dateOfBirth": "1990-05-15",
+  "status": false
+}
+
+###
