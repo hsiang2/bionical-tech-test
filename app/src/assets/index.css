@@ -1,1 +1,35 @@
 @import 'tailwindcss';
+
+body {
+    @apply min-h-screen bg-no-repeat bg-cover bg-center bg-fixed
+    bg-[url('/src/assets/images/bg-mobile.jpg')]
+    md:bg-[url('/src/assets/images/bg-tablet.jpg')]
+    lg:bg-[url('/src/assets/images/bg-desktop.jpg')] text-xs md:text-base;
+
+    font-family: "Urbanist", sans-serif;
+}
+
+/* Form */
+select {
+  @apply  bg-[url('@/assets/images/icon-select.svg')] bg-size-[20px] md:bg-size-[26px] bg-no-repeat bg-position-[right_0.5rem_center];
+}
+
+.label-base {
+  @apply block mb-1 text-xs md:text-sm text-[#092E58];
+}
+
+.input-base {
+  @apply w-full rounded-md bg-white px-3 py-2 md:text-lg lg:text-xl text-[#2E2E2E] focus:outline-none;
+}
+
+.input-normal {
+  @apply border-none focus:ring-2 focus:ring-[#498BCA];
+}
+
+.input-error {
+  @apply border-2 border-[#D1477C] focus:ring-1 focus:ring-[#e75d92];
+}
+
+.error-text {
+  @apply mt-1 text-xs text-red-600;
+}

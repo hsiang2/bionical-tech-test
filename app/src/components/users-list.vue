@@ -2,26 +2,156 @@
 import { onMounted, ref, computed } from 'vue'
 import { getUsers } from '@/http-service/users'
 import { getGenderName } from '@/data/genders'
+import { tableLabels } from '@/data/labels'
+import { calculateAge, formatDate, formatDateTime } from "@/utils/date";
+import editUserModal from './edit-user-modal.vue';
 
 const users = ref([])
+const isEditModalOpen = ref(false)
+const selectedUser = ref(null)
+
 onMounted(async () => (users.value = (await getUsers()).users))
 
-</script>
+function openEditModal(user) {
+  selectedUser.value = { ...user }
+  isEditModalOpen.value = true
+}
 
+const handleSave = async (payload) => {
+  try {
+    let updated = await updateUser(payload.id, payload)
+
+    const index = users.value.findIndex((u) => u.id === updated.id)
+    if (index !== -1) {
+      users.value[index] = updated
+    }
+
+    isEditModalOpen.value = false
+  } catch (err) {
+    console.error('Failed to save user', err)
+  }
+}
+
+
+</script>
 <template>
-  <div class="p-4 relative">
-    <h2 class="text-xl font-semibold">Users List</h2>
-    <div v-for="user in users" :key="user.id">
-      <p>ID: {{ user.id }}</p>
-      <p>First name: {{ user.firstName }}</p>
-      <p>Last name: {{ user.lastName }}</p>
-      <p>Email: {{ user.email }}</p>
-      <p>Date of birth: {{ user.dateOfBirth }}</p>
-      <p>Gender: {{ getGenderName(user.gender) }}</p>
-      <p>Last updated: {{ user.lastUpdated }}</p>
-      <p>Status: {{ user.status }}</p>
+  <div class="container mx-auto px-5 py-5 md:py-[30px] lg:py-[60px]">
+    <h2 class="text-3xl md:text-4xl lg:text-5xl font-black text-white mb-2.5 md:mb-5 mt-[100px]">Users</h2>
+    <!-- Mobile/tablet list -->
+    <div class="lg:hidden font-bold flex flex-col gap-2.5 ">
+      <div 
+        v-for="user in users" :key="user.id"
+        class="bg-white rounded-[20px] p-5 flex flex-col gap-5"
+      >
+        <div class="flex justify-between">
+          <div class="w-full">
+            <p class=" text-[#B7BCC2] mb-1.5">{{ tableLabels.firstName }}</p>
+            <p class="text-[#2E2E2E]">{{ user.firstName }}</p>
+          </div>
+          <div class="w-full">
+            <p class=" text-[#B7BCC2] mb-1.5">{{ tableLabels.lastName }}</p>
+            <p class="text-[#2E2E2E]">{{ user.lastName }}</p>
+          </div>
+          <div class="w-full">
+            <p class=" text-[#B7BCC2] mb-1.5">{{ tableLabels.email }}</p>
+            <p class="text-[#2E2E2E]">{{ user.email }}</p>
+          </div>
+        </div>
+        <div class="flex justify-between flex-col gap-2.5 md:flex-row">
+          <div class="flex justify-between w-full">
+            <div class="w-full">
+              <p class=" text-[#B7BCC2] mb-1.5">{{ tableLabels.gender }}</p>
+              <p class="text-[#2E2E2E]">{{ getGenderName(user.gender) }}</p>
+            </div>
+            <div class="w-full">
+              <p class=" text-[#B7BCC2] mb-1.5">{{ tableLabels.dateOfBirth }}</p>
+              <p class="text-[#2E2E2E]">{{ formatDate(user.dateOfBirth) }}</p>
+            </div>
+            <div class="md:w-full">
+              <p class="text-[#B7BCC2] mb-1.5">{{ tableLabels.age }}</p>
+              <p class="text-[#2E2E2E]">{{ calculateAge(user.dateOfBirth) }}</p>
+            </div>
+          </div>
+          <div class="flex justify-between w-full">
+            <div class="w-full">
+              <p class=" text-[#B7BCC2] mb-1.5">{{ tableLabels.lastUpdated }}</p>
+              <p class="text-[#2E2E2E]">{{ formatDateTime(user.lastUpdated) }}</p>
+            </div>
+            <div class="w-full flex gap-5">
+              <div class="w-full text-center">
+                <p class=" text-[#B7BCC2] mb-1.5">{{ tableLabels.status }}</p>
+                <div v-if="user.status" class="flex justify-center rounded-[5px] bg-[#6F811D] text-white">
+                  Active
+                </div>
+                <div v-else class="flex justify-center rounded-[5px] bg-[#B42D60] text-white">
+                  Disabled
+                </div>
+              </div>
+              <button class="cursor-pointer" @click="openEditModal(user)">
+                <img src="@/assets/images/icon-edit.svg" alt="Edit icon" class="min-w-[26px]" />
+              </button>
+            </div>
+           
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Desktop table -->
+    <div class="hidden lg:block h-[600px] bg-white/50 rounded-[20px] overflow-x-hidden overflow-y-scroll font-bold">
+      <table class="w-full text-left">
+        <thead>
+          <tr class="border-b border-[#A8ADB3] bg-white text-[#B7BCC2]">
+            <th class="p-4">{{ tableLabels.firstName }}</th>
+            <th class="p-4">{{ tableLabels.lastName }}</th>
+            <th class="p-4">{{ tableLabels.email }}</th>
+            <th class="p-4">{{ tableLabels.gender }}</th>
+            <th class="p-4">{{ tableLabels.dateOfBirth }}</th>
+            <th class="p-4">{{ tableLabels.age }}</th>
+            <th class="p-4">{{ tableLabels.lastUpdated }}</th>
+            <th class="p-4 text-center">{{ tableLabels.status }}</th>
+            <th class="p-4">
+              <span class="sr-only">Actions</span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            v-for="user in users" :key="user.id"
+            class="border-b border-[#A8ADB3] bg-white text-[#2E2E2E]"
+          >
+            <td class="p-4">{{ user.firstName }}</td>
+            <td class="p-4">{{ user.lastName }}</td>
+            <td class="p-4">{{ user.email }}</td>
+            <td class="p-4">{{ getGenderName(user.gender) }}</td>
+            <td class="p-4">{{ formatDate(user.dateOfBirth) }}</td>
+            <td class="p-4">{{ calculateAge(user.dateOfBirth) }}</td>
+            <td class="p-4">{{ formatDateTime(user.lastUpdated) }}</td>
+            <td>
+              <div v-if="user.status" class="flex justify-center rounded-[5px] w-full bg-[#6F811D] text-white">
+                Active
+              </div>
+              <div v-else class="flex justify-center rounded-[5px] w-full bg-[#B42D60] text-white">
+                Disabled
+              </div>
+            </td>
+            <td class="p-4 min-w-[60px]">
+              <button class="cursor-pointer" @click="openEditModal(user)">
+                  <img src="@/assets/images/icon-edit.svg" alt="Edit icon" class="w-[26px]" />
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
+
+  <edit-user-modal 
+    v-model:open="isEditModalOpen"
+    :user="selectedUser"
+    @save="handleSave"
+  />
+ 
+
 </template>
 
 <style scoped></style>

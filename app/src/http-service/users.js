@@ -1,4 +1,5 @@
-const baseUrl = 'https://localhost:7197/users'
+// const baseUrl = 'https://localhost:7197/users'
+const baseUrl = 'http://localhost:5212/users'
 
 export const getUsers = async () => {
   try {

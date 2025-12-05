@@ -1,8 +1,10 @@
 <script setup></script>
 
 <template>
-  <header class="bg-gray-800 p-4 text-white">
-    <h1 class="text-2xl font-bold">Page Header</h1>
+  <header class="bg-white/30 backdrop-blur-[10px] shadow-[0_5px_20px_0_rgba(0,0,0,0.25)] fixed w-full">
+  <div class="container p-5 mx-auto">
+    <img src="@/assets/images/logo.svg" alt="Logo" class="h-[40px] md:h-[60px] mx-auto md:mx-0 " />
+  </div>
   </header>
 </template>
 
