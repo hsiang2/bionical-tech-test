@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, ref, computed } from 'vue'
-import { getUsers } from '@/http-service/users'
+import { getUsers, updateUser } from '@/http-service/users'
 import { getGenderName } from '@/data/genders'
 import { tableLabels } from '@/data/labels'
 import { calculateAge, formatDate, formatDateTime } from "@/utils/date";
@@ -9,6 +9,8 @@ import editUserModal from './edit-user-modal.vue';
 const users = ref([])
 const isEditModalOpen = ref(false)
 const selectedUser = ref(null)
+const isSaving = ref(false);
+const saveError = ref('')
 
 onMounted(async () => (users.value = (await getUsers()).users))
 
@@ -18,6 +20,9 @@ function openEditModal(user) {
 }
 
 const handleSave = async (payload) => {
+  saveError.value = '';
+  isSaving.value = true;
+
   try {
     let updated = await updateUser(payload.id, payload)
 
@@ -28,7 +33,9 @@ const handleSave = async (payload) => {
 
     isEditModalOpen.value = false
   } catch (err) {
-    console.error('Failed to save user', err)
+    saveError.value = err?.message ?? 'Failed to save user'
+  } finally {
+    isSaving.value = false
   }
 }
 
@@ -148,6 +155,8 @@ const handleSave = async (payload) => {
   <edit-user-modal 
     v-model:open="isEditModalOpen"
     :user="selectedUser"
+    :is-saving="isSaving"
+    :error-message="saveError"
     @save="handleSave"
   />
  

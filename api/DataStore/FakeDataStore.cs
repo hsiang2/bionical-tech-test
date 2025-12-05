@@ -29,4 +29,26 @@ public static class FakeDataStore
         
         return FakeUsers;
     }
+    public static User? UpdateUser(Guid id, User updated)
+    {
+        var index = FakeUsers.FindIndex(user => user.Id == id);
+        if (index == -1) return null;
+        
+        var existing = FakeUsers[index];
+
+        var newUser = existing with
+        {
+            FirstName = updated.FirstName,
+            LastName = updated.LastName,
+            Email = updated.Email,
+            Gender = updated.Gender,
+            DateOfBirth = updated.DateOfBirth,
+            Status = updated.Status,
+            LastUpdated = DateTime.UtcNow
+        };
+
+        FakeUsers[index] = newUser;
+
+        return newUser;
+    }
 }

@@ -4,10 +4,21 @@ import { formLabels } from '@/data/labels'
 import { genders } from '@/data/genders'
 
 const props = defineProps({
-  open: Boolean,
+  open: {
+    type: Boolean,
+    required: true
+  },
   user: {
     type: Object,
     default: null
+  },
+  isSaving: {
+    type: Boolean,
+    default: false
+  },
+  errorMessage: {
+    type: String,
+    default: ''
   }
 })
 
@@ -26,7 +37,6 @@ const errors = reactive({
   firstName: '',
   lastName: '',
   email: '',
-//   gender: '',
   dateOfBirth: ''
 })
 
@@ -77,11 +87,6 @@ const validate = () => {
       valid = false
     }
   }
-
-//   if (!form.gender) {
-//     errors.gender = `${formLabels.gender} is required`
-//     valid = false
-//   }
 
   if (!form.dateOfBirth) {
     errors.dateOfBirth = `${formLabels.dateOfBirth} is required`
@@ -188,7 +193,6 @@ const submit = () => {
                         {{ gender.name }}
                     </option>
                 </select>
-                <!-- <img src="@/assets/images/icon-select.svg" alt="Select icon" class="absolute min-w-[26px]" /> -->
             </div>
 
             <div>
@@ -234,6 +238,9 @@ const submit = () => {
                     </label>
                 </div>
             </div>
+            <p v-if="errorMessage" class="error-text">
+              {{ errorMessage }}
+            </p>
 
             <div class="flex justify-between mt-10 md:text-lg lg:text-xl font-bold">
                 <button 
@@ -244,9 +251,11 @@ const submit = () => {
                 </button>
                 <button 
                     type="submit"
-                    class="px-4 py-2 bg-[#498BCA] rounded-[10px] text-white cursor-pointer"
+                    class="px-4 py-2 bg-[#498BCA] rounded-[10px] text-white cursor-pointer disabled:opacity-50"
+                    :disabled="isSaving"
                 >
-                    SAVE
+                  <span v-if="isSaving">SAVING...</span>
+                  <span v-else>SAVE</span>
                 </button>
             </div>
         </form>
