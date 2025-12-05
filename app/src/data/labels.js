@@ -8,12 +8,3 @@ export const tableLabels = {
   lastUpdated: 'LAST UPDATED',
   status: 'STATUS'
 }
-
-export const formLabels = {
-  firstName: 'First Name',
-  lastName: 'Last Name',
-  email: 'Email',
-  gender: 'Gender',
-  dateOfBirth: 'Date of Birth',
-  status: 'Status'
-}

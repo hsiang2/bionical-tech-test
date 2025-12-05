@@ -1,6 +1,5 @@
 <script setup>
 import { reactive, watch } from 'vue'
-import { formLabels } from '@/data/labels'
 import { genders } from '@/data/genders'
 
 const props = defineProps({
@@ -68,17 +67,17 @@ const validate = () => {
   let valid = true
 
   if (!form.firstName.trim()) {
-    errors.firstName = `${formLabels.firstName} is required`
+    errors.firstName = 'First name is required'
     valid = false
   }
 
   if (!form.lastName.trim()) {
-    errors.lastName = `${formLabels.lastName} is required`
+    errors.lastName = 'Last name is required'
     valid = false
   }
 
   if (!form.email.trim()) {
-    errors.email = `${formLabels.email} is required`
+    errors.email = 'Email is required'
     valid = false
   } else {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -89,7 +88,7 @@ const validate = () => {
   }
 
   if (!form.dateOfBirth) {
-    errors.dateOfBirth = `${formLabels.dateOfBirth} is required`
+    errors.dateOfBirth = 'Date of birth is required'
     valid = false
   }
 
@@ -121,13 +120,13 @@ const submit = () => {
     v-if="open"
     class="fixed inset-0 bg-black/70 backdrop-blur-[10px] flex items-start justify-center z-50 pt-2.5 md:pt-[50px] lg:pt-[60px]"
   >
-    <div class="bg-[#CAE2F2] p-5 md:p-[30px] rounded-[20px] w-[400px] md:w-[650px]">
+    <div class="bg-[#CAE2F2] p-5 md:p-[30px] rounded-[20px] w-[400px] md:w-[650px] max-h-[700px] overflow-scroll">
         <h1 class="text-xl md:text-2xl lg:text-3xl font-black text-[#092E58] mb-5 md:mb-7">Edit User</h1>
 
         <form class="space-y-5" @submit.prevent="submit" novalidate>
             <div>
                 <label class="label-base">
-                    {{ formLabels.firstName }}*
+                    First Name*
                 </label>
                 <input
                     v-model="form.firstName"
@@ -145,7 +144,7 @@ const submit = () => {
 
             <div>
                 <label class="label-base">
-                    {{ formLabels.lastName }}*
+                    Last Name*
                 </label>
                 <input
                     v-model="form.lastName"
@@ -162,7 +161,7 @@ const submit = () => {
 
             <div>
                 <label class="label-base">
-                {{ formLabels.email }}
+                  Email*
                 </label>
                 <input
                     v-model="form.email"
@@ -179,7 +178,7 @@ const submit = () => {
 
             <div>
                 <label class="label-base">
-                    {{ formLabels.gender }}
+                  Gender
                 </label>
                 <select
                     v-model="form.gender"
@@ -197,7 +196,7 @@ const submit = () => {
 
             <div>
                 <label class="label-base">
-                    {{ formLabels.dateOfBirth }}*
+                  Date of Birth*
                 </label>
                 <input
                     v-model="form.dateOfBirth"
@@ -214,7 +213,7 @@ const submit = () => {
 
             <div>
                 <label class="label-base">
-                    {{ formLabels.status }}
+                  Status
                 </label>
                 <div class="flex gap-6 mt-1">
                     <label class="flex items-center gap-2">
@@ -222,7 +221,15 @@ const submit = () => {
                             type="radio"
                             v-model="form.status"
                             :value="true"
-                            class="h-4 w-4"
+                            class="
+                              h-6 w-6
+                              appearance-none
+                              rounded-full
+                              bg-white
+                              ring-3 ring-white ring-offset-0
+                              checked:bg-[#498BCA]
+                              checked:ring-white
+                            "
                         />
                         <span class="md:text-lg lg:text-xl text-[#092E58]">Active</span>
                     </label>
@@ -232,7 +239,15 @@ const submit = () => {
                             type="radio"
                             v-model="form.status"
                             :value="false"
-                            class="h-4 w-4"
+                            class="
+                              h-6 w-6
+                              appearance-none
+                              rounded-full
+                              bg-white
+                              ring-3 ring-white ring-offset-0
+                              checked:bg-[#498BCA]
+                              checked:ring-white
+                            "
                         />
                         <span class="md:text-lg lg:text-xl text-[#092E58]">Disabled</span>
                     </label>
@@ -245,13 +260,13 @@ const submit = () => {
             <div class="flex justify-between mt-10 md:text-lg lg:text-xl font-bold">
                 <button 
                     @click="close"
-                    class="px-5 py-2 bg-white rounded-[10px] cursor-pointer text-[#092E58]"
+                    class="px-5 py-2 bg-white rounded-[10px] cursor-pointer hover:opacity-70 text-[#092E58]"
                 >
                     CANCEL
                 </button>
                 <button 
                     type="submit"
-                    class="px-4 py-2 bg-[#498BCA] rounded-[10px] text-white cursor-pointer disabled:opacity-50"
+                    class="px-4 py-2 bg-[#498BCA] rounded-[10px] text-white cursor-pointer hover:opacity-70 disabled:opacity-50"
                     :disabled="isSaving"
                 >
                   <span v-if="isSaving">SAVING...</span>
