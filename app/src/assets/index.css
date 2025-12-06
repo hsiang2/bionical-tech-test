@@ -30,6 +30,12 @@ select {
   @apply border-2 border-[#D1477C] focus:ring-1 focus:ring-[#e75d92];
 }
 
+.input-radio {
+  @apply  h-6 w-6 appearance-none rounded-full bg-white ring-3 ring-white ring-offset-0 checked:bg-[#498BCA] checked:ring-white
+}
+
 .error-text {
   @apply mt-1 text-xs text-red-600;
 }
+
+

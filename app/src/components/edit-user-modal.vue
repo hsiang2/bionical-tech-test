@@ -131,7 +131,6 @@ const submit = () => {
                 <input
                     v-model="form.firstName"
                     type="text"
-                    class="w-full rounded-md border px-3 py-2 text-sm focus:outline-none focus:ring-2"
                     :class="[
                         'input-base',
                         errors.firstName ? 'input-error' : 'input-normal'
@@ -221,15 +220,7 @@ const submit = () => {
                             type="radio"
                             v-model="form.status"
                             :value="true"
-                            class="
-                              h-6 w-6
-                              appearance-none
-                              rounded-full
-                              bg-white
-                              ring-3 ring-white ring-offset-0
-                              checked:bg-[#498BCA]
-                              checked:ring-white
-                            "
+                            class="input-radio"
                         />
                         <span class="md:text-lg lg:text-xl text-[#092E58]">Active</span>
                     </label>
@@ -239,15 +230,7 @@ const submit = () => {
                             type="radio"
                             v-model="form.status"
                             :value="false"
-                            class="
-                              h-6 w-6
-                              appearance-none
-                              rounded-full
-                              bg-white
-                              ring-3 ring-white ring-offset-0
-                              checked:bg-[#498BCA]
-                              checked:ring-white
-                            "
+                            class="input-radio"
                         />
                         <span class="md:text-lg lg:text-xl text-[#092E58]">Disabled</span>
                     </label>

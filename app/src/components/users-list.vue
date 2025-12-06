@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref, computed } from 'vue'
+import { onMounted, ref } from 'vue'
 import { getUsers, updateUser } from '@/http-service/users'
 import { getGenderName } from '@/data/genders'
 import { tableLabels } from '@/data/labels'
@@ -20,9 +20,14 @@ onMounted(async () => {
 
   try {
     const res = await getUsers()
+    if (!res) {
+      loadError.value = 'Failed to load users.'
+      users.value = []
+      return
+    }
     users.value = res?.users ?? []
   } catch (error) {
-    console.error(err)
+    console.error(error)
     loadError.value = 'Failed to load users.'
   } finally {
     isLoadingUsers.value = false
@@ -184,8 +189,6 @@ const handleSave = async (payload) => {
         </table>
       </div>
     </template>
-
-    
   </div>
 
   <edit-user-modal 
@@ -195,7 +198,6 @@ const handleSave = async (payload) => {
     :error-message="saveError"
     @save="handleSave"
   />
- 
 
 </template>
 

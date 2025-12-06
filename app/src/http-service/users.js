@@ -1,4 +1,9 @@
+// Original template URL (HTTPS):
 // const baseUrl = 'https://localhost:7197/users'
+
+// On my machine, the HTTPS endpoint shows the browser error:
+// "Failed to load resource: The certificate for this server is invalid."
+// So I am using the HTTP endpoint instead:
 const baseUrl = 'http://localhost:5212/users'
 
 export const getUsers = async () => {
@@ -11,6 +16,7 @@ export const getUsers = async () => {
     return await response.json()
   } catch (error) {
     console.error(error.message)
+    return null
   }
 }
 
@@ -40,6 +46,7 @@ export const updateUser = async (userId, payload) => {
   try {
     data = await response.json()
   } catch {
+    data = null
   }
 
   if (!response.ok) {
