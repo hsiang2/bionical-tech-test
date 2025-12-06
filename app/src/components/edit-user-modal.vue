@@ -54,8 +54,8 @@ watch(
     form.lastName = user.lastName ?? ''
     form.email = user.email ?? ''
     form.gender = user.gender ?? ''
-    form.dateOfBirth = user.dateOfBirth ? String(user.dateOfBirth).slice(0, 10) : ''
-    form.status = Boolean(user.status)
+    form.dateOfBirth = user.dateOfBirth ?? ''
+    form.status = user.status
 
     clearErrors()
   },
